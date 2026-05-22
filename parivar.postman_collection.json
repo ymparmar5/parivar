@@ -359,7 +359,7 @@
       "response": []
     },
     {
-      "name": "kamiti_members",
+      "name": "committee_members",
       "event": [
         {
           "listen": "test",
@@ -391,9 +391,9 @@
           "formdata": []
         },
         "url": {
-          "raw": "{{parivar}}kamiti_members",
+          "raw": "{{parivar}}committee_members",
           "host": [
-            "{{parivar}}kamiti_members"
+            "{{parivar}}committee_members"
           ]
         }
       },

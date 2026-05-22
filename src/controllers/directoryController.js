@@ -116,7 +116,7 @@ const getFamilyMembers = async (req, res) => {
   }
 };
 
-const getKamitiMembers = async (req, res) => {
+const getcommitteeMembers = async (req, res) => {
   try {
     const committee = await User.find({
       $or: [
@@ -134,7 +134,7 @@ const getKamitiMembers = async (req, res) => {
       image: publicUrl(req, member.signature || member.image || member.profile_image || '')
     }));
 
-    return apiResponse(res, 200, 'Kamiti Memeber Data fetch successful', data);
+    return apiResponse(res, 200, 'committee Memeber Data fetch successful', data);
   } catch (error) {
     return apiResponse(res, 500, 'Error retrieving committee', { error: error.message });
   }
@@ -191,7 +191,7 @@ const getCityList = async (req, res) => {
 module.exports = {
   getMembers,
   getFamilyMembers,
-  getKamitiMembers,
+  getcommitteeMembers,
   getCountryList,
   getStateList,
   getCityList
