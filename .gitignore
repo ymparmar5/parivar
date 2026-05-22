@@ -1,4 +1,7 @@
 node_modules
-.env# simulate prefix install
+.env
+
 npm install
 npm start
+
+*.env
