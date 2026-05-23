@@ -51,7 +51,7 @@ app.use('/', feedRoutes);
 // Namespaced aliases for app/admin usage.
 app.use('/api/auth', authRoutes);
 app.use('/api/business', businessRoutes);
-app.use('/api/config', configRoutes);
+app.use('/api/get_app_theme', configRoutes);
 app.use('/api/directory', directoryRoutes);
 app.use('/api/feed', feedRoutes);
 app.use('/api/users', userRoutes);
