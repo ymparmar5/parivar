@@ -103,7 +103,7 @@
               "script": {
                 "exec": [
                   "if (pm.response.code === 200) {",
-                  "    pm.environment.set('phone_number', pm.request.body.raw.phone_number);",
+                  "    pm.environment.set('phone_number', pm.request.body.formdata.find(item => item.key === 'number').value);",
                   "}"
                 ]
               }
@@ -111,15 +111,15 @@
           ],
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"number\": \"{{phone_number}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "number",
+                  "value": "{{phone_number}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/auth/login",
@@ -137,15 +137,20 @@
           "name": "Login (verify OTP)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"number\": \"{{phone_number}}\", \"otp\": \"{{otp}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "number",
+                  "value": "{{phone_number}}",
+                  "type": "text"
+                },
+                {
+                  "key": "otp",
+                  "value": "{{otp}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/auth/login",
@@ -163,15 +168,15 @@
           "name": "Select Account Login",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"member_id\": \"{{member_id}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "member_id",
+                  "value": "{{member_id}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/auth/select_account_login",
@@ -220,15 +225,30 @@
           "name": "Register (create user)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"first_name\": \"John\", \"number\": \"{{phone_number}}\", \"email\": \"{{email}}\", \"password\": \"{{password}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "first_name",
+                  "value": "John",
+                  "type": "text"
+                },
+                {
+                  "key": "number",
+                  "value": "{{phone_number}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "{{email}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{password}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/users/register",
@@ -246,15 +266,20 @@
           "name": "Login (email/password)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"email\": \"{{email}}\", \"password\": \"{{password}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "email",
+                  "value": "{{email}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{password}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/users/login",
@@ -301,13 +326,12 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/users/",
+              "raw": "{{base_url}}/users",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
-                "users",
-                ""
+                "users"
               ]
             }
           }
@@ -342,15 +366,22 @@
               {
                 "key": "Authorization",
                 "value": "Bearer {{token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
               }
             ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"first_name\": \"John Updated\", \"city_id\": \"{{city_id}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "first_name",
+                  "value": "John Updated",
+                  "type": "text"
+                },
+                {
+                  "key": "city_id",
+                  "value": "{{city_id}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/users/{{user_id}}",
@@ -372,15 +403,22 @@
               {
                 "key": "Authorization",
                 "value": "Bearer {{token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
               }
             ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"id\": \"{{user_id}}\", \"first_name\": \"John Updated\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "id",
+                  "value": "{{user_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "first_name",
+                  "value": "John Updated",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/users/update",
@@ -608,15 +646,17 @@
               {
                 "key": "Authorization",
                 "value": "Bearer {{token}}"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
               }
             ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"member_id\": \"{{member_id}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "member_id",
+                  "value": "{{member_id}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/directory/family_members",
@@ -672,15 +712,15 @@
           "name": "State List (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"country_id\": \"{{country_id}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "country_id",
+                  "value": "{{country_id}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/directory/state_list",
@@ -698,15 +738,15 @@
           "name": "City List (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"state_id\": \"{{state_id}}\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "state_id",
+                  "value": "{{state_id}}",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/directory/city_list",
@@ -851,11 +891,12 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/businesses",
+              "raw": "{{base_url}}/business/businesses",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
+                "business",
                 "businesses"
               ]
             }
@@ -872,11 +913,12 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/businesses/{{business_id}}",
+              "raw": "{{base_url}}/business/businesses/{{business_id}}",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
+                "business",
                 "businesses",
                 "{{business_id}}"
               ]
@@ -907,15 +949,15 @@
           "name": "Update Config (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
             "body": {
-              "mode": "raw",
-              "raw": "{\"app_name\": \"Parivar\"}"
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "app_name",
+                  "value": "Parivar",
+                  "type": "text"
+                }
+              ]
             },
             "url": {
               "raw": "{{base_url}}/config",
