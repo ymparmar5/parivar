@@ -1,67 +1,38 @@
 const countries = [
-	{
-		id: 'IN',
-		name: 'India',
-		country: 'India'
-	}
+	{ id: '1', name: 'India', country: 'India' },
+	{ id: '2', name: 'United States', country: 'United States' }
 ];
 
 const states = [
-	{
-		id: 'GJ',
-		country_id: 'IN',
-		name: 'Gujarat',
-		state: 'Gujarat'
-	},
-	{
-		id: 'MH',
-		country_id: 'IN',
-		name: 'Maharashtra',
-		state: 'Maharashtra'
-	}
+	{ id: '1', country_id: '1', name: 'Gujarat', state: 'Gujarat' },
+	{ id: '2', country_id: '1', name: 'Maharashtra', state: 'Maharashtra' },
+	{ id: '3', country_id: '2', name: 'California', state: 'California' }
 ];
 
 const cities = [
-	{
-		id: 'AMD',
-		state_id: 'GJ',
-		name: 'Ahmedabad',
-		city: 'Ahmedabad'
-	},
-	{
-		id: 'MUM',
-		state_id: 'MH',
-		name: 'Mumbai',
-		city: 'Mumbai'
-	}
+	{ id: '1', state_id: '1', name: 'Ahmedabad', city: 'Ahmedabad' },
+	{ id: '2', state_id: '1', name: 'Surat', city: 'Surat' },
+	{ id: '3', state_id: '2', name: 'Mumbai', city: 'Mumbai' },
+	{ id: '4', state_id: '3', name: 'San Francisco', city: 'San Francisco' }
 ];
 
 const businessCategories = [
-	{
-		id: 'BC01',
-		name: 'Restaurants',
-		state_id: 'GJ',
-		business: 'Food & Dining'
-	},
-	{
-		id: 'BC02',
-		name: 'Health & Wellness',
-		state_id: 'GJ',
-		business: 'Healthcare'
-	}
+	{ id: '1', name: 'Restaurants', state_id: '1', business: 'Food & Dining' },
+	{ id: '2', name: 'Health & Wellness', state_id: '1', business: 'Healthcare' },
+	{ id: '3', name: 'IT Services', state_id: '1', business: 'Technology' }
 ];
 
 const businesses = [
 	{
-		id: 'BIZ1001',
-		member_id: '24',
-		business_category_id: 'BC01',
+		id: 'BIZ001',
+		member_id: '101',
+		business_category_id: '1',
 		business_name: 'Parivar Sweets & Family Dining',
 		number: '9876543210',
 		number_2: '9876501234',
-		country_id: 'IN',
-		state_id: 'GJ',
-		city_id: 'AMD',
+		country_id: '1',
+		state_id: '1',
+		city_id: '1',
 		address: '123 Family Lane, Satellite, Ahmedabad',
 		location_link: 'https://maps.example.com/parivar-sweets',
 		image: '/uploads/1.jpg',
@@ -71,10 +42,7 @@ const businesses = [
 		pinterest: '',
 		youtube: '',
 		website: 'https://parivar.example.com',
-		gallery_images: [
-			'/uploads/2.jpg',
-			'/uploads/3.jpg'
-		],
+		gallery_images: ['/uploads/2.jpg', '/uploads/3.jpg'],
 		gallery_image_1: '/uploads/2.jpg',
 		gallery_image_2: '/uploads/3.jpg',
 		gallery_image_3: '/uploads/4.jpg',
@@ -84,33 +52,24 @@ const businesses = [
 		cdate: '2026-05-22'
 	},
 	{
-		id: 'BIZ1002',
-		member_id: '26',
-		business_category_id: 'BC02',
+		id: 'BIZ002',
+		member_id: '103',
+		business_category_id: '2',
 		business_name: 'Parivar Health & Care',
 		number: '9123456780',
 		number_2: '9123456781',
-		country_id: 'IN',
-		state_id: 'GJ',
-		city_id: 'AMD',
+		country_id: '1',
+		state_id: '1',
+		city_id: '1',
 		address: '45 Wellness Road, Navrangpura, Ahmedabad',
 		location_link: 'https://maps.example.com/parivar-health',
 		image: '/uploads/7.jpg',
 		about_us: 'Community healthcare service with doctor consultations, wellness sessions, and support for families.',
 		facebook: 'https://facebook.com/parivar.health',
 		instagram: 'https://instagram.com/parivar_health',
-		pinterest: '',
-		youtube: '',
 		website: 'https://parivarhealth.example.com',
-		gallery_images: [
-			'/uploads/8.jpg',
-			'/uploads/9.jpg'
-		],
 		gallery_image_1: '/uploads/8.jpg',
 		gallery_image_2: '/uploads/9.jpg',
-		gallery_image_3: '/uploads/10.jpg',
-		gallery_image_4: '/uploads/1.jpg',
-		gallery_image_5: '/uploads/2.jpg',
 		status: 1,
 		cdate: '2026-05-22'
 	}
@@ -118,8 +77,8 @@ const businesses = [
 
 const posts = [
 	{
-		id: 'PST1001',
-		member_id: '24',
+		id: 'POST001',
+		member_id: '101',
 		title: 'Summer Festival Planning',
 		description: 'Join our community planning meeting for the upcoming summer festival. Everyone is invited to share ideas and volunteer.',
 		image: '/uploads/5.jpg',
@@ -127,13 +86,22 @@ const posts = [
 		cdate: '2026-05-20'
 	},
 	{
-		id: 'PST1002',
-		member_id: '25',
+		id: 'POST002',
+		member_id: '102',
 		title: 'Family Reunion Highlights',
 		description: 'A recap of the last family reunion with special moments, stories, and photographs from all age groups.',
 		image: '/uploads/6.jpg',
 		status: 1,
 		cdate: '2026-04-12'
+	},
+	{
+		id: 'POST003',
+		member_id: '103',
+		title: 'Health Awareness Camp Announcement',
+		description: 'We are organizing a free health checkup camp next weekend. Please register early to book your slot.',
+		image: '/uploads/7.jpg',
+		status: 1,
+		cdate: '2026-05-23'
 	}
 ];
 
@@ -148,11 +116,20 @@ const galleries = [
 		event_category: 'Family Gathering'
 	},
 	{
-		title: 'Community Diwali Celebration',
+		title: 'Community Diwali Celebration 2024',
 		description: 'Lights, rangoli, and sweets from the Diwali celebration event.',
 		image: '/uploads/8.jpg',
 		category: 'Festival',
 		year: '2024',
+		gallery_category_id: 'G02',
+		event_category: 'Festival'
+	},
+	{
+		title: 'Navratri Garba Night 2023',
+		description: 'Vibrant colors and energetic dances from our Navratri event.',
+		image: '/uploads/9.jpg',
+		category: 'Festival',
+		year: '2023',
 		gallery_category_id: 'G02',
 		event_category: 'Festival'
 	}
@@ -180,6 +157,17 @@ const festivals = [
 		button_name: 'Join Now',
 		button_link: 'https://example.com/navratri',
 		festival_description: 'Enjoy traditional folk music and colorful attire in our annual Garba celebration.'
+	},
+	{
+		title: 'Holi Festival of Colors',
+		description: 'Celebrate the arrival of spring with organic colors and music.',
+		image: '/uploads/1.jpg',
+		date: new Date('2027-03-22'),
+		festival_name: 'Holi 2027',
+		festival_date: '2027-03-22',
+		button_name: 'View Details',
+		button_link: 'https://example.com/holi',
+		festival_description: 'Join us for a vibrant morning of music, dance, and festive treats.'
 	}
 ];
 
@@ -190,7 +178,7 @@ const events = [
 		image: '/uploads/9.jpg',
 		event_date: new Date('2026-06-15'),
 		venue: 'Community Center, Ahmedabad',
-		event_category_id: 'E001',
+		event_category_id: '1',
 		event_category_name: 'Health',
 		event_name: 'Health Camp 2026',
 		event_location: 'Community Center',
@@ -206,7 +194,7 @@ const events = [
 		image: '/uploads/10.jpg',
 		event_date: new Date('2026-09-19'),
 		venue: 'Parivar Mandir Hall, Ahmedabad',
-		event_category_id: 'E002',
+		event_category_id: '2',
 		event_category_name: 'Religious',
 		event_name: 'Ganesh Puja 2026',
 		event_location: 'Mandir Hall',
@@ -220,89 +208,112 @@ const events = [
 
 const users = [
 	{
-		member_id: '24',
-		first_name: 'Chovatiya',
-		middle_name: 'Ravibhai',
-		last_name: 'J',
-		email: 'chovatiya@gmail.com',
-		password: 'Ravi@123',
-		number: '7990881893',
+		member_id: '101',
+		first_name: 'Ramesh',
+		middle_name: 'K',
+		last_name: 'Patel',
+		email: 'ramesh.patel@example.com',
+		password: 'password123',
+		number: '7990881893', // Login number
 		gender: 'Male',
-		dob: new Date('1978-03-16'),
+		dob: new Date('1975-04-12'),
 		blood_group: 'B+',
 		relation: 'Self',
 		is_committee: true,
 		committee_role: 'President',
 		profile_image: '/uploads/1.jpg',
-		country_id: 'IN',
-		state_id: 'GJ',
-		city_id: 'AMD',
-		address: '123 Family Lane, Satellite, Ahmedabad',
-		family_code: 'FAM1001'
+		country_id: '1',
+		state_id: '1',
+		city_id: '1',
+		address: '101 Sardar Patel Society, Ahmedabad',
+		family_code: 'FAM001'
 	},
 	{
-		member_id: '25',
-		parent_member_id: '24',
-		first_name: 'Naimish',
-		middle_name: 'Tanti',
-		last_name: '',
-		email: 'naimish@gmail.com',
-		password: 'Naimish@123',
-		number: '9123456789',
-		gender: 'Male',
-		dob: new Date('2005-08-01'),
-		blood_group: 'A+',
-		relation: 'Son',
-		profile_image: '/uploads/2.jpg',
-		country_id: 'IN',
-		state_id: 'GJ',
-		city_id: 'AMD',
-		address: '123 Family Lane, Satellite, Ahmedabad',
-		family_code: 'FAM1001'
-	},
-	{
-		member_id: '26',
-		parent_member_id: '24',
-		first_name: 'Asha',
-		middle_name: 'R.',
+		member_id: '102',
+		parent_member_id: '101',
+		first_name: 'Sunita',
+		middle_name: 'R',
 		last_name: 'Patel',
-		email: 'asha.patel@example.com',
-		password: 'Asha@123',
-		number: '9988776655',
+		email: 'sunita.patel@example.com',
+		password: 'password123',
+		number: '7990881893', // Shared login number
 		gender: 'Female',
-		dob: new Date('1980-10-12'),
-		blood_group: 'O-',
+		dob: new Date('1978-08-22'),
+		blood_group: 'O+',
 		relation: 'Spouse',
 		is_committee: false,
-		committee_role: 'Staff',
-		profile_image: '/uploads/3.jpg',
-		country_id: 'IN',
-		state_id: 'GJ',
-		city_id: 'AMD',
-		address: '123 Family Lane, Satellite, Ahmedabad',
-		family_code: 'FAM1001'
+		committee_role: '',
+		profile_image: '/uploads/2.jpg',
+		country_id: '1',
+		state_id: '1',
+		city_id: '1',
+		address: '101 Sardar Patel Society, Ahmedabad',
+		family_code: 'FAM001'
 	},
 	{
-		member_id: '27',
-		parent_member_id: '24',
-		first_name: 'Rina',
-		middle_name: 'K.',
-		last_name: 'Shah',
-		email: 'rina.shah@example.com',
-		password: 'Rina@123',
-		number: '7990881893',
-		gender: 'Female',
-		dob: new Date('1995-04-24'),
+		member_id: '103',
+		first_name: 'Rahul',
+		middle_name: 'M',
+		last_name: 'Sharma',
+		email: 'rahul.sharma@example.com',
+		password: 'password123',
+		number: '9876543210',
+		gender: 'Male',
+		dob: new Date('1990-11-05'),
 		blood_group: 'A+',
-		relation: 'Staff',
+		relation: 'Self',
+		is_committee: true,
+		committee_role: 'Secretary',
+		profile_image: '/uploads/3.jpg',
+		country_id: '1',
+		state_id: '1',
+		city_id: '1',
+		address: '405 Green Avenue, Ahmedabad',
+		family_code: 'FAM002'
+	},
+	{
+		member_id: '104',
+		parent_member_id: '103',
+		first_name: 'Priya',
+		middle_name: 'R',
+		last_name: 'Sharma',
+		email: 'priya.sharma@example.com',
+		password: 'password123',
+		number: '9876543210', // Shared login number
+		gender: 'Female',
+		dob: new Date('1992-02-18'),
+		blood_group: 'AB+',
+		relation: 'Spouse',
 		is_committee: false,
-		committee_role: 'Staff',
+		committee_role: '',
 		profile_image: '/uploads/4.jpg',
-		country_id: 'IN',
-		state_id: 'GJ',
-		city_id: 'AMD',
-		address: '123 Family Lane, Satellite, Ahmedabad',
-		family_code: 'FAM1001'
+		country_id: '1',
+		state_id: '1',
+		city_id: '1',
+		address: '405 Green Avenue, Ahmedabad',
+		family_code: 'FAM002'
+	},
+	{
+		member_id: '105',
+		parent_member_id: '103',
+		first_name: 'Aarav',
+		middle_name: 'R',
+		last_name: 'Sharma',
+		email: 'aarav.sharma@example.com',
+		password: 'password123',
+		number: '9876543210', // Shared login number
+		gender: 'Male',
+		dob: new Date('2015-07-30'),
+		blood_group: 'A+',
+		relation: 'Son',
+		is_committee: false,
+		committee_role: '',
+		profile_image: '',
+		country_id: '1',
+		state_id: '1',
+		city_id: '1',
+		address: '405 Green Avenue, Ahmedabad',
+		family_code: 'FAM002'
 	}
 ];
 
