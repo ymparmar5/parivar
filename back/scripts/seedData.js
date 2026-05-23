@@ -211,8 +211,8 @@ const users = [
 		member_id: '101',
 		first_name: 'Ramesh',
 		middle_name: 'K',
-		last_name: 'Patel',
-		email: 'ramesh.patel@example.com',
+		last_name: 'parikh',
+		email: 'ramesh.parikh@example.com',
 		password: 'password123',
 		number: '7990881893', // Login number
 		gender: 'Male',
@@ -225,7 +225,7 @@ const users = [
 		country_id: '1',
 		state_id: '1',
 		city_id: '1',
-		address: '101 Sardar Patel Society, Ahmedabad',
+		address: '101 Sardar parikh Society, Ahmedabad',
 		family_code: 'FAM001'
 	},
 	{
@@ -233,8 +233,8 @@ const users = [
 		parent_member_id: '101',
 		first_name: 'Sunita',
 		middle_name: 'R',
-		last_name: 'Patel',
-		email: 'sunita.patel@example.com',
+		last_name: 'parikh',
+		email: 'sunita.parikh@example.com',
 		password: 'password123',
 		number: '7990881893', // Shared login number
 		gender: 'Female',
@@ -247,7 +247,7 @@ const users = [
 		country_id: '1',
 		state_id: '1',
 		city_id: '1',
-		address: '101 Sardar Patel Society, Ahmedabad',
+		address: '101 Sardar parikh Society, Ahmedabad',
 		family_code: 'FAM001'
 	},
 	{
@@ -331,6 +331,32 @@ const configs = [
 	}
 ];
 
+const news = [
+	{
+		news_id: 'NEWS001',
+		title: "Honorable Prime Minister to Attend parikh Family Wedding",
+		description: "Prime Minister Narendra Modi will grace the auspicious wedding ceremony of Chirag  & Mansi  on May 25, 2026, in Ahmedabad.",
+		content: "Ahmedabad: In a moment of immense pride for our community, the Honorable Prime Minister Narendra Modi has accepted the invitation to attend the grand wedding of Chirag parikh (son of Shri Babubhai parikh) and Mansi Shah...",
+		date: new Date('2026-06-15'),
+		category: 'VIP Visit',
+		image_url:'https://images.unsplash.com/photo-1511795409834-ef04bbd61622',
+		reporter_name: 'Ramesh Kumar',
+		location: 'Ahmedabad, Gujarat'
+	},
+	{
+		news_id: 'NEWS002',
+		title: "Parivar Sweets & Family Dining Wins Best Restaurant Award",
+		description: "Parivar Sweets & Family Dining has been recognized for its exceptional service and culinary excellence.",
+		content: "Ahmedabad: Parivar Sweets & Family Dining has been awarded the 'Best Restaurant' title at the annual Gujarat Food Festival...",
+		date: new Date('2026-06-20'),
+		category: 'Awards',
+		image_url:'https://images.unsplash.com/photo-1513104890138-7c749659a591',
+		reporter_name: 'Sunita Sharma',
+		location: 'Ahmedabad, Gujarat'
+	}
+];
+
+
 module.exports = {
 	countries,
 	states,
@@ -342,5 +368,6 @@ module.exports = {
 	festivals,
 	events,
 	users,
-	configs
+	configs,
+	news
 };

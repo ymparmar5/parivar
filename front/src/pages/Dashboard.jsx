@@ -70,7 +70,7 @@ export default function Dashboard() {
   const recentActivities = [
     { id: 1, type: 'member', text: 'Rahul Sharma updated member details', time: '10 mins ago', date: 'May 23, 2026' },
     { id: 2, type: 'business', text: 'New family business listing "Parivar Sweets" approved', time: '1 hour ago', date: 'May 23, 2026' },
-    { id: 3, type: 'post', text: 'Health Awareness Camp post published by sunita.patel@example.com', time: '4 hours ago', date: 'May 23, 2026' },
+    { id: 3, type: 'post', text: 'Health Awareness Camp post published by sunita.parikh@example.com', time: '4 hours ago', date: 'May 23, 2026' },
     { id: 4, type: 'system', text: 'Admin configuration settings updated successfully', time: '1 day ago', date: 'May 22, 2026' }
   ]
 

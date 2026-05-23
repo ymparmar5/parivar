@@ -110,7 +110,7 @@ export default function Login() {
           <div>
             <div className="font-bold text-slate-400">Onboarding Quick Connect:</div>
             <div className="mt-1 font-mono text-[9px] text-slate-400">
-              <span className="text-violet-400 font-semibold">User:</span> ramesh.patel@example.com
+              <span className="text-violet-400 font-semibold">User:</span> ramesh.parikh@example.com
               <br />
               <span className="text-violet-400 font-semibold">Pass:</span> password123
             </div>

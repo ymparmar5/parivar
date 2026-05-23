@@ -12,6 +12,7 @@ const Festival = require('../src/models/festivalModel');
 const Event = require('../src/models/eventModel');
 const Config = require('../src/models/configModel');
 const User = require('../src/models/userModels');
+const News = require('../src/models/newsModel');
 const seedData = require('./seedData');
 
 const collections = [
@@ -24,7 +25,8 @@ const collections = [
 	{ name: 'galleries', model: Gallery, data: seedData.galleries },
 	{ name: 'festivals', model: Festival, data: seedData.festivals },
 	{ name: 'events', model: Event, data: seedData.events },
-	{ name: 'configs', model: Config, data: seedData.configs }
+	{ name: 'configs', model: Config, data: seedData.configs },
+	{ name: 'news', model: News, data: seedData.news }
 ];
 
 const seedDB = async () => {
