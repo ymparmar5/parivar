@@ -1,6 +1,6 @@
 const express = require('express');
 const { protect } = require('../middleware/auth');
-const { parseForm } = require('../middleware/upload');
+const { parseForm, postUpload } = require('../middleware/upload');
 const {
   getNewsList,
   getNewsById,
@@ -13,8 +13,8 @@ const router = express.Router();
 
 router.get('/news_list', protect, getNewsList);
 router.get('/news/:id', protect, getNewsById);
-router.post('/news', protect, parseForm, addNews);
-router.put('/news/:id', protect, parseForm, updateNews);
+router.post('/news', protect, postUpload, addNews);
+router.put('/news/:id', protect, postUpload, updateNews);
 router.delete('/news/:id', protect, deleteNews);
 
 module.exports = router;
