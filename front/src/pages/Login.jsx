@@ -6,8 +6,8 @@ import { AuthContext } from '../context/AuthContext'
 export default function Login() {
   const { login } = useContext(AuthContext)
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('bhavikwala@gmail.com')
+  const [password, setPassword] = useState('Bhavik@123')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -110,9 +110,9 @@ export default function Login() {
           <div>
             <div className="font-bold text-slate-400">Onboarding Quick Connect:</div>
             <div className="mt-1 font-mono text-[9px] text-slate-400">
-              <span className="text-violet-400 font-semibold">User:</span> ramesh.parikh@example.com
+              <span className="text-violet-400 font-semibold">User:</span> bhavikwala@gmail.com
               <br />
-              <span className="text-violet-400 font-semibold">Pass:</span> password123
+              <span className="text-violet-400 font-semibold">Pass:</span> Bhavik@123
             </div>
             <div className="mt-1 text-[9px] leading-snug">Ramesh is flagged as a committee President in seeds, granting full administration access.</div>
           </div>

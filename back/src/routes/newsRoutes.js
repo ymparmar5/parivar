@@ -11,10 +11,10 @@ const {
 
 const router = express.Router();
 
-router.get('/news_list', protect, getNewsList);
-router.get('/news/:id', protect, getNewsById);
-router.post('/news', protect, postUpload, addNews);
-router.put('/news/:id', protect, postUpload, updateNews);
-router.delete('/news/:id', protect, deleteNews);
+router.get('/', protect, getNewsList);
+router.get('/:id', protect, getNewsById);
+router.post('/', protect, postUpload, addNews);
+router.put('/:id', protect, postUpload, updateNews);
+router.delete('/:id', protect, deleteNews);
 
 module.exports = router;

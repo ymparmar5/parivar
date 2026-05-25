@@ -23,11 +23,11 @@ const newsSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true
+    required: false
   },
   category: {
     type: String,
-    required: true
+    required: false
   },
   image_url: {
     type: String,
