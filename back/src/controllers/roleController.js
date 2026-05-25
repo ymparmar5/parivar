@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Role = require('../models/roleModel');
 const User = require('../models/userModels');
-const { ALL_PERMISSION_KEYS, PERMISSIONS } = require('../config/permissions');
+const { ACTIONS, ALL_PERMISSION_KEYS, PERMISSION_MODULES, PERMISSIONS } = require('../config/permissions');
 const { apiResponse } = require('../utils/apiResponse');
 
 const sanitizePermissions = (permissions = []) => {
@@ -19,7 +19,18 @@ const formatRole = (role) => ({
 });
 
 const getPermissionOptions = async (req, res) => {
-  return apiResponse(res, 200, 'Permission options retrieved successfully', PERMISSIONS);
+  return apiResponse(res, 200, 'Permission options retrieved successfully', {
+    actions: ACTIONS,
+    modules: PERMISSION_MODULES.map((module) => ({
+      ...module,
+      permissions: ACTIONS.map((action) => ({
+        key: `${module.key}.${action.key}`,
+        label: action.label,
+        action: action.key
+      }))
+    })),
+    permissions: PERMISSIONS
+  });
 };
 
 const getRoles = async (req, res) => {

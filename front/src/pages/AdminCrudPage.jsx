@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Edit2, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
-import api from '../lib/api'
+import { Edit2, Image as ImageIcon, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
+import api, { assetUrl } from '../lib/api'
 import Modal from '../components/Modal'
 
 const fieldClass = 'w-full px-3 py-2.5 bg-slate-950/40 text-slate-200 border border-white/[0.08] focus:border-brand-500/50 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500/10'
@@ -51,7 +51,7 @@ export default function AdminCrudPage({ title, subtitle, endpoint, fields, colum
     setSelected(row)
     setFormData(fields.reduce((acc, field) => ({
       ...acc,
-      [field.name]: row[field.name] ?? row[field.fallback] ?? field.defaultValue ?? ''
+      [field.name]: field.type === 'file' ? '' : row[field.name] ?? row[field.fallback] ?? field.defaultValue ?? ''
     }), {}))
     setIsModalOpen(true)
   }
@@ -61,10 +61,29 @@ export default function AdminCrudPage({ title, subtitle, endpoint, fields, colum
     setSaving(true)
     setError('')
     try {
+      const hasFiles = fields.some((field) => field.type === 'file' && (
+        formData[field.name] instanceof File ||
+        formData[field.name] instanceof FileList ||
+        Array.isArray(formData[field.name])
+      ))
+      const payload = hasFiles ? new FormData() : formData
+
+      if (hasFiles) {
+        fields.forEach((field) => {
+          const value = formData[field.name]
+          if (field.type === 'file') {
+            const files = value instanceof FileList ? Array.from(value) : Array.isArray(value) ? value : value ? [value] : []
+            files.forEach((file) => payload.append(field.name, file))
+          } else {
+            payload.append(field.name, value ?? '')
+          }
+        })
+      }
+
       if (selected) {
-        await api.put(`${endpoint}/${selected.id}`, formData)
+        await api.put(`${endpoint}/${selected.id}`, payload)
       } else {
-        await api.post(endpoint, formData)
+        await api.post(endpoint, payload)
       }
       await fetchRows()
       setSuccess(`${title} saved successfully`)
@@ -145,7 +164,11 @@ export default function AdminCrudPage({ title, subtitle, endpoint, fields, colum
                   <tr key={row.id} className="hover:bg-white/[0.02] text-xs text-slate-300">
                     {columns.map((column) => (
                       <td key={column.key} className="p-4 max-w-md">
-                        <span className="line-clamp-2">{column.render ? column.render(row) : row[column.key] || '-'}</span>
+                        {column.type === 'image' && row[column.key] ? (
+                          <img src={assetUrl(row[column.key])} alt={row.title || title} className="h-12 w-16 rounded-lg object-cover border border-white/[0.08]" />
+                        ) : (
+                          <span className="line-clamp-2">{column.render ? column.render(row) : row[column.key] || '-'}</span>
+                        )}
                       </td>
                     ))}
                     <td className="p-4 text-right">
@@ -182,6 +205,23 @@ export default function AdminCrudPage({ title, subtitle, endpoint, fields, colum
                 <select value={formData[field.name] ?? ''} onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })} className={fieldClass} disabled={saving}>
                   {field.options.map((option) => <option key={option.value} value={option.value} className="bg-[#0c1020]">{option.label}</option>)}
                 </select>
+              ) : field.type === 'file' ? (
+                <div className="space-y-2">
+                  <input
+                    type="file"
+                    accept={field.accept || 'image/*'}
+                    multiple={field.multiple}
+                    onChange={(e) => setFormData({ ...formData, [field.name]: field.multiple ? e.target.files : e.target.files?.[0] || '' })}
+                    className="w-full text-xs text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-500/15 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-brand-200 hover:file:bg-brand-500/25"
+                    disabled={saving}
+                  />
+                  {selected?.image && !field.multiple && (
+                    <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                      <ImageIcon className="h-3.5 w-3.5" />
+                      <span>Current image will be kept unless a new file is selected.</span>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <input type={field.type || 'text'} value={formData[field.name] || ''} onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })} className={fieldClass} disabled={saving} />
               )}

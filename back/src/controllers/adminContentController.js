@@ -27,6 +27,7 @@ const findById = (Model, id) => Model.findOne({
 
 const imageFromRequest = (req, fallback = '') => {
   if (req.file) return `/uploads/${req.file.filename}`;
+  if (Array.isArray(req.body.images) && req.body.images[0]) return req.body.images[0];
   return req.body.image || req.body.image_url || fallback || '';
 };
 
@@ -111,11 +112,27 @@ const saveContent = (Model, payloadBuilder, formatter, label, prefix) => async (
       return apiResponse(res, 400, `${label} description is required`);
     }
 
-    if (!payload.image && label === 'Gallery') {
+    const hasGalleryImages = Array.isArray(req.body.images) && req.body.images.length > 0;
+
+    if (!payload.image && label === 'Gallery' && !hasGalleryImages) {
       return apiResponse(res, 400, 'Gallery image is required');
     }
 
+    if (label === 'Gallery' && !existing && hasGalleryImages) {
+      const docs = await Promise.all(req.body.images.map(async (image, index) => {
+        const doc = new Model({ id: await nextPublicId(Model, `${prefix}${index}_`) });
+        const galleryDocPayload = { ...payload, image };
+        delete galleryDocPayload.images;
+        Object.assign(doc, galleryDocPayload);
+        await doc.save();
+        return formatter(req, doc.toObject());
+      }));
+
+      return apiResponse(res, 201, 'Gallery saved successfully', docs);
+    }
+
     const doc = existing || new Model({ id: await nextPublicId(Model, prefix) });
+    delete payload.images;
     Object.assign(doc, payload);
     await doc.save();
 

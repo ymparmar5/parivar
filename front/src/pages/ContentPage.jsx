@@ -12,9 +12,10 @@ const definitions = {
       { name: 'festival_date', label: 'Festival Date', type: 'date' },
       { name: 'button_name', label: 'Button Name' },
       { name: 'button_link', label: 'Button Link' },
-      { name: 'image', label: 'Image Path or URL' }
+      { name: 'image', label: 'Image', type: 'file' }
     ],
     columns: [
+      { key: 'image', label: 'Image', type: 'image' },
       { key: 'title', label: 'Title' },
       { key: 'festival_date', label: 'Date' },
       { key: 'button_name', label: 'Action' }
@@ -31,9 +32,10 @@ const definitions = {
       { name: 'event_location', label: 'Location', fallback: 'venue' },
       { name: 'event_category_name', label: 'Category' },
       { name: 'entry_type', label: 'Entry Type' },
-      { name: 'image', label: 'Image Path or URL' }
+      { name: 'image', label: 'Image', type: 'file' }
     ],
     columns: [
+      { key: 'image', label: 'Image', type: 'image' },
       { key: 'title', label: 'Event' },
       { key: 'event_date', label: 'Date' },
       { key: 'event_location', label: 'Location' }
@@ -48,9 +50,10 @@ const definitions = {
       { name: 'description', label: 'Description', type: 'textarea' },
       { name: 'category', label: 'Category' },
       { name: 'year', label: 'Year' },
-      { name: 'image', label: 'Image Path or URL' }
+      { name: 'images', label: 'Images', type: 'file', multiple: true }
     ],
     columns: [
+      { key: 'image', label: 'Image', type: 'image' },
       { key: 'title', label: 'Title' },
       { key: 'category', label: 'Category' },
       { key: 'year', label: 'Year' }
@@ -64,10 +67,11 @@ const definitions = {
       { name: 'title', label: 'Title' },
       { name: 'subtitle', label: 'Subtitle', type: 'textarea' },
       { name: 'link', label: 'Link' },
-      { name: 'image', label: 'Image Path or URL' },
+      { name: 'image', label: 'Image', type: 'file' },
       { name: 'status', label: 'Status', type: 'select', defaultValue: 1, options: [{ value: 1, label: 'Active' }, { value: 0, label: 'Inactive' }] }
     ],
     columns: [
+      { key: 'image', label: 'Image', type: 'image' },
       { key: 'title', label: 'Title' },
       { key: 'subtitle', label: 'Subtitle' },
       { key: 'status', label: 'Status', render: (row) => Number(row.status) === 1 ? 'Active' : 'Inactive' }

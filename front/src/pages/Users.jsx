@@ -6,6 +6,7 @@ import UserForm from '../components/UserForm'
 
 export default function Users() {
   const [users, setUsers] = useState([])
+  const [roles, setRoles] = useState([])
   const [loading, setLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
@@ -62,6 +63,19 @@ export default function Users() {
       controller.abort()
     }
   }, [fetchUsers])
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const res = await api.get('/roles')
+        setRoles(res.data?.data || res.data || [])
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    fetchRoles()
+  }, [])
 
   // Handle Search submit
   const handleSearchSubmit = (e) => {
@@ -353,7 +367,7 @@ export default function Users() {
         title={selectedUser ? 'Modify Member Profile' : 'Register New Member'}
         onClose={handleCloseModal}
       >
-        <UserForm user={selectedUser} onSubmit={handleSubmit} isLoading={formLoading} />
+        <UserForm user={selectedUser} roles={roles} onSubmit={handleSubmit} isLoading={formLoading} />
       </Modal>
     </div>
   )

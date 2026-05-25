@@ -10,6 +10,7 @@ import Businesses from './pages/Businesses'
 import Feed from './pages/Feed'
 import Settings from './pages/Settings'
 import CommitteeMembers from './pages/CommitteeMembers'
+import Roles from './pages/Roles'
 import ContentPage from './pages/ContentPage'
 import MasterPage from './pages/MasterPage'
 
@@ -28,6 +29,7 @@ export default function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="committee" element={<CommitteeMembers />} />
+          <Route path="roles" element={<Roles />} />
           <Route path="users" element={<Users />} />
           <Route path="festivals" element={<ContentPage type="festivals" />} />
           <Route path="events" element={<ContentPage type="events" />} />

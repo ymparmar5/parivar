@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../models/userModels');
-const { ALL_PERMISSION_KEYS } = require('../config/permissions');
+const { ALL_PERMISSION_KEYS, PERMISSIONS } = require('../config/permissions');
 
 const isInvalidTokenValue = (token) => {
   if (!token) {
@@ -137,16 +137,46 @@ const getRolePermissions = (user = {}) => {
   }
 
   if (user.is_committee || user.relation === 'Self') {
-    return ALL_PERMISSION_KEYS;
+    return PERMISSIONS.map((permission) => permission.key);
   }
 
   return [];
 };
 
+const legacyPermissionFor = (permission) => {
+  const legacyMap = {
+    'members.': 'users.manage',
+    'committee.': 'committee.manage',
+    'roles.': 'roles.manage',
+    'festivals.': 'festivals.manage',
+    'events.': 'events.manage',
+    'gallery.': 'gallery.manage',
+    'banners.': 'banners.manage',
+    'businesses.': 'businesses.manage',
+    'posts.': 'posts.manage',
+    'contact-inquiries.': 'contact-inquiries.manage',
+    'settings.': 'settings.manage',
+    'country.': 'masters.manage',
+    'state.': 'masters.manage',
+    'district.': 'masters.manage',
+    'taluka.': 'masters.manage',
+    'city.': 'masters.manage',
+    'village.': 'masters.manage',
+    'area.': 'masters.manage',
+    'blood-group.': 'masters.manage',
+    'event-category.': 'masters.manage'
+  };
+
+  return Object.entries(legacyMap).find(([prefix]) => permission.startsWith(prefix))?.[1] || permission;
+};
+
 const requirePermission = (permission) => async (req, res, next) => {
   const permissions = getRolePermissions(req.user);
+  const resolvedPermission = typeof permission === 'function' ? permission(req) : permission;
+  const required = Array.isArray(resolvedPermission) ? resolvedPermission : [resolvedPermission];
+  const accepted = required.flatMap((item) => [item, legacyPermissionFor(item)]);
 
-  if (permissions.includes(permission)) {
+  if (accepted.some((item) => permissions.includes(item))) {
     return next();
   }
 

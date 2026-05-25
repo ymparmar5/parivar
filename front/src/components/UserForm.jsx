@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
-export default function UserForm({ user, onSubmit, isLoading }) {
+export default function UserForm({ user, roles = [], onSubmit, isLoading }) {
   const [formData, setFormData] = useState({
     first_name: '',
     middle_name: '',
@@ -13,6 +13,7 @@ export default function UserForm({ user, onSubmit, isLoading }) {
     relation: 'Self',
     is_committee: false,
     committee_role: '',
+    role_id: '',
     address: '',
     password: ''
   })
@@ -41,6 +42,7 @@ export default function UserForm({ user, onSubmit, isLoading }) {
         relation: user.relation || 'Self',
         is_committee: user.is_committee || false,
         committee_role: user.committee_role || '',
+        role_id: user.role_id || '',
         address: user.address || '',
         password: ''
       })
@@ -57,11 +59,14 @@ export default function UserForm({ user, onSubmit, isLoading }) {
         relation: 'Self',
         is_committee: false,
         committee_role: '',
+        role_id: '',
         address: '',
         password: ''
       })
     }
   }, [user])
+
+  const activeRoles = useMemo(() => roles.filter((role) => Number(role.status ?? 1) === 1), [roles])
 
   const validate = () => {
     const newErrors = {}
@@ -254,16 +259,30 @@ export default function UserForm({ user, onSubmit, isLoading }) {
           </label>
 
           {formData.is_committee && (
-            <div className="flex-1 w-full animate-fade-in">
-              <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Committee Designation Role Name</label>
-              <input
-                type="text"
-                placeholder="e.g. President, Vice President, Secretary"
-                value={formData.committee_role}
-                onChange={(e) => setFormData({ ...formData, committee_role: e.target.value })}
-                className="w-full px-3 py-2.5 bg-slate-950/40 text-slate-200 border border-white/[0.08] focus:border-brand-500/50 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500/10 transition-all"
-                disabled={isLoading}
-              />
+            <div className="flex-1 w-full animate-fade-in grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Admin Role</label>
+                <select
+                  value={formData.role_id}
+                  onChange={(e) => setFormData({ ...formData, role_id: e.target.value })}
+                  className="w-full bg-slate-950/40 text-slate-300 border border-white/[0.08] rounded-xl py-2.5 px-3 text-xs outline-none focus:border-brand-500/50 cursor-pointer"
+                  disabled={isLoading}
+                >
+                  <option value="" className="bg-[#0c1020]">Select Role</option>
+                  {activeRoles.map((role) => <option key={role.id} value={role.id} className="bg-[#0c1020]">{role.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Committee Designation</label>
+                <input
+                  type="text"
+                  placeholder="e.g. President, Vice President, Secretary"
+                  value={formData.committee_role}
+                  onChange={(e) => setFormData({ ...formData, committee_role: e.target.value })}
+                  className="w-full px-3 py-2.5 bg-slate-950/40 text-slate-200 border border-white/[0.08] focus:border-brand-500/50 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500/10 transition-all"
+                  disabled={isLoading}
+                />
+              </div>
             </div>
           )}
         </div>

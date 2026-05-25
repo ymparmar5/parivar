@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { FileText, Calendar, Trash2, Clock, Search, RefreshCw } from 'lucide-react'
+import { FileText, Calendar, Trash2, Clock, Search, RefreshCw, Plus, Edit2 } from 'lucide-react'
 import api, { assetUrl } from '../lib/api'
+import Modal from '../components/Modal'
+
+const fieldClass = 'w-full px-3 py-2.5 bg-slate-950/40 text-slate-200 border border-white/[0.08] focus:border-brand-500/50 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500/10'
 
 export default function Feed() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [search, setSearch] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [selected, setSelected] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    status: 1,
+    image: null
+  })
 
   useEffect(() => {
     fetchPosts()
@@ -40,6 +52,53 @@ export default function Feed() {
     }
   }
 
+  const openCreate = () => {
+    setSelected(null)
+    setFormData({ title: '', description: '', status: 1, image: null })
+    setIsModalOpen(true)
+  }
+
+  const openEdit = (post) => {
+    setSelected(post)
+    setFormData({
+      title: post.title || '',
+      description: post.description || '',
+      status: Number(post.status ?? 1),
+      image: null
+    })
+    setIsModalOpen(true)
+  }
+
+  const handleSave = async (event) => {
+    event.preventDefault()
+    setSaving(true)
+    setError('')
+
+    try {
+      const payload = new FormData()
+      payload.append('title', formData.title)
+      payload.append('description', formData.description)
+      payload.append('status', formData.status)
+      if (formData.image) payload.append('image', formData.image)
+
+      if (selected) {
+        await api.put(`/posts/${selected.id}`, payload)
+      } else {
+        await api.post('/posts', payload)
+      }
+
+      await fetchPosts()
+      setSuccess('Feed post saved successfully')
+      setIsModalOpen(false)
+      setSelected(null)
+      setTimeout(() => setSuccess(''), 3000)
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to save feed post')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const filtered = posts.filter(p => 
     p.title?.toLowerCase().includes(search.toLowerCase()) ||
     p.description?.toLowerCase().includes(search.toLowerCase())
@@ -60,6 +119,12 @@ export default function Feed() {
             title="Refresh posts"
           >
             <RefreshCw className="w-4 h-4" />
+          </button>
+          <button
+            onClick={openCreate}
+            className="flex items-center gap-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white px-4 py-2.5 rounded-xl text-xs font-semibold transition-all"
+          >
+            <Plus className="w-4 h-4" /> Add
           </button>
           <div className="relative group flex-1 sm:w-64">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-500">
@@ -149,6 +214,14 @@ export default function Feed() {
                   </div>
 
                   <button
+                    type="button"
+                    onClick={() => openEdit(post)}
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider text-brand-300 bg-brand-500/10 hover:bg-brand-500/25 border border-brand-500/20 hover:border-brand-500/40 transition-all"
+                  >
+                    <Edit2 className="w-3 h-3" /> Edit
+                  </button>
+
+                  <button
                     onClick={() => handleDelete(post.id)}
                     className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider text-rose-400 bg-rose-500/10 hover:bg-rose-500/25 border border-rose-500/20 hover:border-rose-500/40 transition-all"
                   >
@@ -160,6 +233,34 @@ export default function Feed() {
           ))}
         </div>
       )}
+
+      <Modal isOpen={isModalOpen} title={selected ? 'Edit Feed Post' : 'Add Feed Post'} onClose={() => setIsModalOpen(false)}>
+        <form onSubmit={handleSave} className="space-y-4 max-h-[76vh] overflow-y-auto pr-1">
+          <div>
+            <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Title *</label>
+            <input value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} className={fieldClass} disabled={saving} />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Description *</label>
+            <textarea rows="4" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className={fieldClass} disabled={saving} />
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Status</label>
+            <select value={formData.status} onChange={(e) => setFormData({ ...formData, status: e.target.value })} className={fieldClass} disabled={saving}>
+              <option value={1} className="bg-[#0c1020]">Active</option>
+              <option value={0} className="bg-[#0c1020]">Inactive</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Image</label>
+            <input type="file" accept="image/*" onChange={(e) => setFormData({ ...formData, image: e.target.files?.[0] || null })} className="w-full text-xs text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-500/15 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-brand-200 hover:file:bg-brand-500/25" disabled={saving} />
+            {selected?.image && <p className="text-[10px] text-slate-500 mt-2">Current image will be kept unless a new file is selected.</p>}
+          </div>
+          <button type="submit" disabled={saving} className="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white py-3 rounded-xl font-semibold text-xs tracking-wider uppercase disabled:opacity-50">
+            {saving ? 'Saving...' : 'Save Feed Post'}
+          </button>
+        </form>
+      </Modal>
     </div>
   )
 }

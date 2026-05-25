@@ -56,7 +56,22 @@ const parseForm = (req, res, next) => {
     return next();
   }
 
-  return upload.none()(req, res, next);
+  return upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'images', maxCount: 20 }
+  ])(req, res, (error) => {
+    if (error) return next(error);
+    if (req.files?.image?.[0]) {
+      req.file = req.files.image[0];
+    }
+    if (req.file && !req.body.image) {
+      req.body.image = `/uploads/${req.file.filename}`;
+    }
+    if (req.files?.images?.length) {
+      req.body.images = req.files.images.map((file) => `/uploads/${file.filename}`);
+    }
+    return next();
+  });
 };
 
 module.exports = {

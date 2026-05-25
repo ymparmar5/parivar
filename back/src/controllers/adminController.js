@@ -4,10 +4,27 @@ const Post = require('../models/postModel');
 const Config = require('../models/configModel');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const { apiResponse, fullName, memberPublicId } = require('../utils/apiResponse');
+const { apiResponse, fullName, memberPublicId, publicUrl } = require('../utils/apiResponse');
 const { getRolePermissions } = require('../middleware/auth');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretfamilykey';
+
+const splitFullName = (value = '') => {
+  const parts = String(value).trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return { first_name: '', middle_name: '', last_name: '' };
+  if (parts.length === 1) return { first_name: parts[0], middle_name: '', last_name: '' };
+  if (parts.length === 2) return { first_name: parts[0], middle_name: '', last_name: parts[1] };
+  return {
+    first_name: parts[0],
+    middle_name: parts.slice(1, -1).join(' '),
+    last_name: parts[parts.length - 1]
+  };
+};
+
+const imageFromRequest = (req, fallback = '') => {
+  if (req.file) return `/uploads/${req.file.filename}`;
+  return req.body.image || fallback || '';
+};
 
 // Admin login (email + password, checks is_committee)
 const login = async (req, res) => {
@@ -93,11 +110,17 @@ const getUsers = async (req, res) => {
   try {
     const { search, gender, blood_group, is_committee } = req.query;
     const query = {};
+    const requestPermissions = getRolePermissions(req.user);
+    const canListMembers = requestPermissions.includes('members.list') || requestPermissions.includes('users.manage');
+    const canListCommittee = requestPermissions.includes('committee.list') || requestPermissions.includes('committee.manage');
 
     if (gender) query.gender = gender;
     if (blood_group) query.blood_group = blood_group;
     if (is_committee !== undefined) {
       query.is_committee = is_committee === 'true';
+    }
+    if (!canListMembers && canListCommittee) {
+      query.is_committee = true;
     }
 
     if (search) {
@@ -128,10 +151,13 @@ const getUsers = async (req, res) => {
       relation: u.relation || 'Self',
       is_committee: u.is_committee || false,
       committee_role: u.committee_role || '',
+      designation: u.designation || '',
       role_id: u.role_id?._id ? String(u.role_id._id) : '',
       role_name: u.role_id?.name || '',
       permissions: getRolePermissions(u),
       address: u.address || '',
+      status: Number(u.status ?? 1),
+      image: publicUrl(req, u.image || u.profile_image || ''),
       role: u.is_committee ? 'admin' : 'user'
     }));
 
@@ -143,10 +169,33 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { first_name, middle_name, last_name, email, phone, password, gender, dob, blood_group, relation, is_committee, committee_role, role_id, address } = req.body;
+    const {
+      full_name,
+      email,
+      phone,
+      password,
+      gender,
+      dob,
+      blood_group,
+      relation,
+      is_committee,
+      committee_role,
+      role_id,
+      address,
+      designation,
+      status
+    } = req.body;
+    const nameParts = splitFullName(full_name);
+    const first_name = req.body.first_name || nameParts.first_name;
+    const middle_name = req.body.middle_name ?? nameParts.middle_name;
+    const last_name = req.body.last_name ?? nameParts.last_name;
 
     if (!first_name || !phone) {
       return apiResponse(res, 400, 'First name and phone number are required');
+    }
+
+    if ((is_committee === true || is_committee === 'true') && req.file?.size > 1024 * 1024) {
+      return apiResponse(res, 400, 'Committee image must be 1 MB or smaller');
     }
 
     // Generate unique member_id
@@ -174,7 +223,10 @@ const createUser = async (req, res) => {
       is_committee: is_committee === true || is_committee === 'true',
       committee_role: committee_role || '',
       role_id: assignedRoleId,
-      address: address || ''
+      address: address || '',
+      designation: designation || '',
+      status: status === undefined ? 1 : Number(status),
+      image: imageFromRequest(req)
     });
 
     await newUser.save();
@@ -184,6 +236,9 @@ const createUser = async (req, res) => {
       name: fullName(newUser),
       email: newUser.email,
       phone: newUser.number,
+      designation: newUser.designation || '',
+      status: Number(newUser.status ?? 1),
+      image: publicUrl(req, newUser.image || ''),
       role: newUser.is_committee ? 'admin' : 'user'
     });
   } catch (error) {
@@ -194,11 +249,35 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { first_name, middle_name, last_name, email, phone, gender, dob, blood_group, relation, is_committee, committee_role, role_id, address, password } = req.body;
+    const {
+      full_name,
+      email,
+      phone,
+      gender,
+      dob,
+      blood_group,
+      relation,
+      is_committee,
+      committee_role,
+      role_id,
+      address,
+      password,
+      designation,
+      status
+    } = req.body;
+    const hasFullName = full_name !== undefined;
+    const nameParts = hasFullName ? splitFullName(full_name) : {};
+    const first_name = req.body.first_name ?? nameParts.first_name;
+    const middle_name = req.body.middle_name ?? nameParts.middle_name;
+    const last_name = req.body.last_name ?? nameParts.last_name;
 
     const user = await User.findOne({ member_id: id });
     if (!user) {
       return apiResponse(res, 404, 'User not found');
+    }
+
+    if ((is_committee === true || is_committee === 'true' || user.is_committee) && req.file?.size > 1024 * 1024) {
+      return apiResponse(res, 400, 'Committee image must be 1 MB or smaller');
     }
 
     if (first_name) user.first_name = first_name;
@@ -214,6 +293,9 @@ const updateUser = async (req, res) => {
     if (committee_role !== undefined) user.committee_role = committee_role;
     if (role_id !== undefined) user.role_id = role_id && mongoose.isValidObjectId(role_id) ? role_id : null;
     if (address !== undefined) user.address = address;
+    if (designation !== undefined) user.designation = designation;
+    if (status !== undefined) user.status = Number(status);
+    if (req.file || req.body.image) user.image = imageFromRequest(req, user.image);
     if (password) user.password = password;
 
     await user.save();
@@ -223,6 +305,9 @@ const updateUser = async (req, res) => {
       name: fullName(user),
       email: user.email,
       phone: user.number,
+      designation: user.designation || '',
+      status: Number(user.status ?? 1),
+      image: publicUrl(req, user.image || ''),
       role: user.is_committee ? 'admin' : 'user'
     });
   } catch (error) {
@@ -301,12 +386,53 @@ const getPosts = async (req, res) => {
       id: p.id || String(p._id),
       title: p.title || '',
       description: p.description || '',
-      image: p.image || '',
+      image: publicUrl(req, p.image || ''),
       cdate: p.cdate || '',
       status: p.status || 1
     })));
   } catch (error) {
     return apiResponse(res, 500, 'Error retrieving posts', { error: error.message });
+  }
+};
+
+const savePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, status } = req.body;
+    const existing = id
+      ? await Post.findOne({ $or: [{ id }, { _id: mongoose.isValidObjectId(id) ? id : undefined }] })
+      : null;
+
+    if (id && !existing) {
+      return apiResponse(res, 404, 'Post not found');
+    }
+
+    if (!title || !description) {
+      return apiResponse(res, 400, 'Post title and description are required');
+    }
+
+    const post = existing || new Post({
+      id: `POST${Date.now()}`,
+      cdate: new Date().toISOString().slice(0, 10)
+    });
+
+    post.title = title;
+    post.description = description;
+    post.status = status === undefined ? Number(post.status ?? 1) : Number(status);
+    if (req.file || req.body.image) post.image = imageFromRequest(req, post.image);
+
+    await post.save();
+
+    return apiResponse(res, existing ? 200 : 201, 'Post saved successfully', {
+      id: post.id || String(post._id),
+      title: post.title || '',
+      description: post.description || '',
+      image: publicUrl(req, post.image || ''),
+      cdate: post.cdate || '',
+      status: Number(post.status ?? 1)
+    });
+  } catch (error) {
+    return apiResponse(res, 500, 'Error saving post', { error: error.message });
   }
 };
 
@@ -362,6 +488,7 @@ module.exports = {
   updateBusiness,
   deleteBusiness,
   getPosts,
+  savePost,
   deletePost,
   getConfig,
   updateConfig

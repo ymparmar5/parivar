@@ -7,6 +7,7 @@ import {
   Mail,
   Megaphone,
   Settings,
+  ShieldCheck,
   UserCog,
   Users
 } from 'lucide-react'
@@ -14,6 +15,7 @@ import {
 export const coreNavigation = [
   { to: '/', label: 'Dashboard', icon: Home, end: true, title: 'System Overview' },
   { to: '/committee', label: 'Committee Members', icon: UserCog, title: 'Committee Members' },
+  { to: '/roles', label: 'Roles', icon: ShieldCheck, title: 'Roles & Permissions' },
   { to: '/users', label: 'Members', icon: Users, title: 'Member Directory' },
   { to: '/festivals', label: 'Festivals', icon: CalendarDays, title: 'Festivals' },
   { to: '/events', label: 'Events', icon: CalendarDays, title: 'Events' },
