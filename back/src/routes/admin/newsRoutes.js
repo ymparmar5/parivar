@@ -10,9 +10,9 @@ const { postUpload } = require('../../middleware/upload');
 
 const router = express.Router();
 
-router.get('/news', protect, requirePermission('news.list'), getNewsList);
-router.post('/news', protect, requirePermission('news.add'), postUpload, addNews);
-router.put('/news/:id', protect, requirePermission('news.edit'), postUpload, updateNews);
-router.delete('/news/:id', protect, requirePermission('news.delete'), deleteNews);
+router.get('/', protect, requirePermission('news.list'), getNewsList);
+router.post('/', protect, requirePermission('news.add'), postUpload, addNews);
+router.put('/:id', protect, requirePermission('news.edit'), postUpload, updateNews);
+router.delete('/:id', protect, requirePermission('news.delete'), deleteNews);
 
 module.exports = router;

@@ -9,8 +9,8 @@ const { parseForm } = require('../../middleware/upload');
 
 const router = express.Router();
 
-router.get('/businesses', protect, requirePermission('businesses.list'), getBusinesses);
-router.put('/businesses/:id', protect, requirePermission('businesses.edit'), parseForm, updateBusiness);
-router.delete('/businesses/:id', protect, requirePermission('businesses.delete'), deleteBusiness);
+router.get('/', protect, requirePermission('businesses.list'), getBusinesses);
+router.put('/:id', protect, requirePermission('businesses.edit'), parseForm, updateBusiness);
+router.delete('/:id', protect, requirePermission('businesses.delete'), deleteBusiness);
 
 module.exports = router;

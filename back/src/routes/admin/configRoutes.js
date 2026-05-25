@@ -8,7 +8,7 @@ const { parseForm } = require('../../middleware/upload');
 
 const router = express.Router();
 
-router.get('/config', protect, requirePermission('settings.edit'), getConfig);
-router.put('/config', protect, requirePermission('settings.edit'), parseForm, updateConfig);
+router.get('/', protect, requirePermission('settings.edit'), getConfig);
+router.put('/', protect, requirePermission('settings.edit'), parseForm, updateConfig);
 
 module.exports = router;

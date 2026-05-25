@@ -6,9 +6,9 @@ const { parseForm } = require('../../middleware/upload');
 const router = express.Router();
 
 router.get('/permissions', protect, requirePermission('roles.list'), roleController.getPermissionOptions);
-router.get('/roles', protect, requirePermission('roles.list'), roleController.getRoles);
-router.post('/roles', protect, requirePermission('roles.add'), parseForm, roleController.saveRole);
-router.put('/roles/:id', protect, requirePermission('roles.edit'), parseForm, roleController.saveRole);
-router.delete('/roles/:id', protect, requirePermission('roles.delete'), roleController.deleteRole);
+router.get('/', protect, requirePermission('roles.list'), roleController.getRoles);
+router.post('/', protect, requirePermission('roles.add'), parseForm, roleController.saveRole);
+router.put('/:id', protect, requirePermission('roles.edit'), parseForm, roleController.saveRole);
+router.delete('/:id', protect, requirePermission('roles.delete'), roleController.deleteRole);
 
 module.exports = router;

@@ -4,6 +4,6 @@ const { protect, requirePermission } = require('../../middleware/auth');
 
 const router = express.Router();
 
-router.get('/stats', protect, requirePermission('dashboard.view'), getStats);
+router.get('/', protect, requirePermission('dashboard.view'), getStats);
 
 module.exports = router;

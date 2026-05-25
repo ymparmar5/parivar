@@ -9,9 +9,9 @@ const { parseForm } = require('../../middleware/upload');
 
 const router = express.Router();
 
-router.get('/posts', protect, requirePermission('posts.list'), getPosts);
-router.post('/posts', protect, requirePermission('posts.add'), parseForm, savePost);
-router.put('/posts/:id', protect, requirePermission('posts.edit'), parseForm, savePost);
-router.delete('/posts/:id', protect, requirePermission('posts.delete'), deletePost);
+router.get('/', protect, requirePermission('posts.list'), getPosts);
+router.post('/', protect, requirePermission('posts.add'), parseForm, savePost);
+router.put('/:id', protect, requirePermission('posts.edit'), parseForm, savePost);
+router.delete('/:id', protect, requirePermission('posts.delete'), deletePost);
 
 module.exports = router;

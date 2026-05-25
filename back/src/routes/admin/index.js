@@ -2,15 +2,15 @@ const express = require('express');
 
 const router = express.Router();
 
-router.use(require('./authRoutes'));
-router.use(require('./dashboardRoutes'));
-router.use(require('./userRoutes'));
-router.use(require('./roleRoutes'));
-router.use(require('./businessRoutes'));
-router.use(require('./postRoutes'));
-router.use(require('./configRoutes'));
-router.use(require('./contentRoutes'));
-router.use(require('./masterRoutes'));
-router.use(require('./newsRoutes'));
+router.use('/auth', require('./authRoutes'));
+router.use('/dashboard', require('./dashboardRoutes'));
+router.use('/users', require('./userRoutes'));
+router.use('/roles', require('./roleRoutes'));
+router.use('/businesses', require('./businessRoutes'));
+router.use('/posts', require('./postRoutes'));
+router.use('/config', require('./configRoutes'));
+router.use('/content', require('./contentRoutes'));
+router.use('/masters', require('./masterRoutes'));
+router.use('/news', require('./newsRoutes'));
 
 module.exports = router;

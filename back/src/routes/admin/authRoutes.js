@@ -4,6 +4,6 @@ const { parseForm } = require('../../middleware/upload');
 
 const router = express.Router();
 
-router.post('/login', parseForm, login);
+router.post('/', parseForm, login);
 
 module.exports = router;
