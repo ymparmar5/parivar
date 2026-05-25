@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../models/userModels');
-const { ALL_PERMISSION_KEYS, PERMISSIONS } = require('../config/permissions');
+const { ALL_PERMISSION_KEYS } = require('../config/permissions');
 
 const isInvalidTokenValue = (token) => {
   if (!token) {
@@ -130,14 +130,14 @@ const protect = async (req, res, next) => {
 };
 
 const getRolePermissions = (user = {}) => {
+  if (user.is_committee || user.relation === 'Self') {
+    return ALL_PERMISSION_KEYS;
+  }
+
   const assignedRole = user.role_id;
 
   if (assignedRole && Number(assignedRole.status ?? 1) === 1) {
     return assignedRole.permissions || [];
-  }
-
-  if (user.is_committee || user.relation === 'Self') {
-    return PERMISSIONS.map((permission) => permission.key);
   }
 
   return [];

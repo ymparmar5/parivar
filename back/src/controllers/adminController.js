@@ -68,7 +68,7 @@ const login = async (req, res) => {
       role_id: user.role_id?._id ? String(user.role_id._id) : '',
       role_name: user.role_id?.name || '',
       permissions,
-      is_super_admin: !user.role_id && (user.is_committee || user.relation === 'Self')
+      is_super_admin: user.is_committee || user.relation === 'Self'
     };
 
     return apiResponse(res, 200, 'Login successful', {
