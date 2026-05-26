@@ -1,6 +1,6 @@
 const express = require('express');
 
-const srouter = express.Router();
+const router = express.Router();
 
 // Member/mobile API surface. Mounted at /api.
 router.use(require('../authRoutes'));

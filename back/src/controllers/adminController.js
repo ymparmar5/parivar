@@ -197,6 +197,7 @@ const createUser = async (req, res) => {
       image
     } = req.body;
   
+    console.log('Creating user with data:', first_name, number);
 
 
     if (!first_name || !number) {
