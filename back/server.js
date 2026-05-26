@@ -47,16 +47,9 @@ app.post('/test', (req, res) => {
 
 // Admin/software APIs.
 
-app.get('/admin', (req, res) => {
-  res.status(200).json({
-    status: 200,
-    message: 'PARIVAR. Admin API WORKING',
-    data: []
-  });
-});
 
 
-app.use('/api/admin/users', adminUserRoutes);
+
 app.use('/api/admin', adminRoutes);
 
 // Member/mobile APIs.
