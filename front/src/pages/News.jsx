@@ -33,7 +33,7 @@ export default function News() {
       setNews(data)
       setError('')
     } catch (err) {
-      setError('Failed to load feed announcements')
+      setError('Failed to load news announcements')
       console.error(err)
     } finally {
       setLoading(false)
@@ -41,14 +41,14 @@ export default function News() {
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this feed News from the community board?')) return
+    if (!window.confirm('Are you sure you want to delete this news announcement from the community board?')) return
     try {
       await api.delete(`/news/${id}`)
       setNews(News.filter(p => p.id !== id))
-      setSuccess('Feed News deleted and moderated successfully')
+      setSuccess('News announcement deleted and moderated successfully')
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError('Failed to delete feed News')
+      setError('Failed to delete news announcement')
     }
   }
 

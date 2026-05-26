@@ -63,7 +63,7 @@ const getPosts = async (req, res) => {
         description: post.description || '',
         image: publicUrl(req, post.image || ''),
         cdate: post.cdate || (post.createdAt ? new Date(post.createdAt).toISOString().slice(0, 10) : ''),
-        date: post.cdate || (post.createdAt ? new Date(post.createdAt).toISOString().slice(0, 10) : ''), // Fallback for feed app
+        date: post.cdate || (post.createdAt ? new Date(post.createdAt).toISOString().slice(0, 10) : ''),
         member_name: fullName(member),
         member_number: member.number || '',
         status: Number(post.status ?? 1),

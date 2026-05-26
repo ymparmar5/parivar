@@ -5,7 +5,7 @@ import Modal from '../components/Modal'
 
 const fieldClass = 'w-full px-3 py-2.5 bg-slate-950/40 text-slate-200 border border-white/[0.08] focus:border-brand-500/50 rounded-xl text-xs outline-none focus:ring-2 focus:ring-brand-500/10'
 
-export default function Feed() {
+export default function Posts() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -33,7 +33,7 @@ export default function Feed() {
       setPosts(data)
       setError('')
     } catch (err) {
-      setError('Failed to load feed announcements')
+      setError('Failed to load posts')
       console.error(err)
     } finally {
       setLoading(false)
@@ -41,14 +41,14 @@ export default function Feed() {
   }
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this feed post from the community board?')) return
+    if (!window.confirm('Are you sure you want to delete this post from the community board?')) return
     try {
       await api.delete(`/posts/${id}`)
       setPosts(posts.filter(p => p.id !== id))
-      setSuccess('Feed post deleted and moderated successfully')
+      setSuccess('Post deleted and moderated successfully')
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError('Failed to delete feed post')
+      setError('Failed to delete post')
     }
   }
 
@@ -88,12 +88,12 @@ export default function Feed() {
       }
 
       await fetchPosts()
-      setSuccess('Feed post saved successfully')
+      setSuccess('Post saved successfully')
       setIsModalOpen(false)
       setSelected(null)
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to save feed post')
+      setError(err.response?.data?.message || 'Failed to save post')
     } finally {
       setSaving(false)
     }
@@ -109,7 +109,7 @@ export default function Feed() {
       {/* Header bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white">Feed Moderator</h2>
+          <h2 className="text-xl font-bold text-white">Post Moderator</h2>
           <p className="text-slate-400 text-xs mt-0.5">Moderate community posts, announcements, and timeline activities</p>
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -132,7 +132,7 @@ export default function Feed() {
             </span>
             <input
               type="search"
-              placeholder="Search feed..."
+              placeholder="Search posts..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-slate-950/40 text-slate-200 placeholder-slate-500 border border-white/[0.08] hover:border-white/[0.15] focus:border-brand-500/50 rounded-xl py-2.5 pl-10 pr-4 text-xs outline-none focus:ring-2 focus:ring-brand-500/10 transition-all duration-300"
@@ -236,7 +236,7 @@ export default function Feed() {
         </div>
       )}
 
-      <Modal isOpen={isModalOpen} title={selected ? 'Edit Feed Post' : 'Add Feed Post'} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={isModalOpen} title={selected ? 'Edit Post' : 'Add Post'} onClose={() => setIsModalOpen(false)}>
         <form onSubmit={handleSave} className="space-y-4 max-h-[76vh] overflow-y-auto pr-1">
           <div>
             <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Title *</label>
@@ -259,7 +259,7 @@ export default function Feed() {
             {selected?.image && <p className="text-[10px] text-slate-500 mt-2">Current image will be kept unless a new file is selected.</p>}
           </div>
           <button type="submit" disabled={saving} className="w-full bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white py-3 rounded-xl font-semibold text-xs tracking-wider uppercase disabled:opacity-50">
-            {saving ? 'Saving...' : 'Save Feed Post'}
+            {saving ? 'Saving...' : 'Save Post'}
           </button>
         </form>
       </Modal>

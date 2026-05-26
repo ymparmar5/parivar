@@ -42,9 +42,9 @@ export default function Dashboard() {
           })),
           ...posts.slice(0, 1).map(post => ({
             id: `post-${post.id}`,
-            text: `${post.title || 'A post'} is visible on the community feed`,
+            text: `${post.title || 'A post'} is visible on the community board`,
             time: 'Published',
-            date: post.cdate || 'Feed post'
+            date: post.cdate || 'Posts board'
           }))
         ])
       } catch (error) {
@@ -83,7 +83,7 @@ export default function Dashboard() {
       sparkColor: '#10b981'
     },
     {
-      title: 'Feed Posts',
+      title: 'Posts',
       value: stats.posts,
       icon: FileText,
       color: 'from-violet-500 to-fuchsia-600',
@@ -242,7 +242,7 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center gap-2">
               <span className="w-3 h-1.5 rounded-full bg-violet-500 border border-dashed border-violet-400"></span>
-              <span>Feed Activity</span>
+              <span>Post Activity</span>
             </div>
           </div>
         </div>

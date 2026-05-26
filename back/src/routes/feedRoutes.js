@@ -6,7 +6,7 @@ const {
   getGallery,
   getEvents,
   getFestivals
-} = require('../controllers/feedController');
+} = require('../controllers/postController');
 
 const {
   savePost,

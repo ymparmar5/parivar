@@ -22,7 +22,7 @@ export const coreNavigation = [
   { to: '/gallery', label: 'Gallery', icon: Image, title: 'Gallery', permission: 'gallery.list' },
   { to: '/banners', label: 'Banners', icon: Megaphone, title: 'Banner Manager', permission: 'banners.list' },
   { to: '/businesses', label: 'Businesses', icon: Briefcase, title: 'Business Index', permission: 'businesses.list' },
-  { to: '/posts', label: 'Feed Posts', icon: FileText, title: 'Feed Moderator', permission: 'posts.list' },
+  { to: '/posts', label: 'Posts', icon: FileText, title: 'Post Moderator', permission: 'posts.list' },
   { to: '/news', label: 'News', icon: FileText, title: 'News Moderator', permission: 'news.list' },
 
   { to: '/contact-inquiries', label: 'Contact Inquiries', icon: Mail, title: 'Contact Inquiries', permission: 'contact-inquiries.list' }
