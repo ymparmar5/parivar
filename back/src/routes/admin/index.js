@@ -20,6 +20,8 @@ router.use('/content', require('./contentRoutes'));
 router.use('/masters', require('./masterRoutes'));
 router.use('/news', require('./newsRoutes'));
 
+
+
 // Approved member/mobile data exposed to admin software under the same admin base URL.
 router.use(require('../member'));
 
