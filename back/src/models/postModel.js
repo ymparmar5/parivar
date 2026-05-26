@@ -7,6 +7,10 @@ const postSchema = new mongoose.Schema({
     sparse: true,
     index: true
   },
+  member_id: {
+    type: String,
+    index: true
+  },
   title: {
     type: String,
     required: true,
@@ -29,6 +33,19 @@ const postSchema = new mongoose.Schema({
   cdate: {
     type: String,
     default: ''
+  },
+  // Tenancy/ownership fields
+  country_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    index: true
+  },
+  state_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    index: true
+  },
+  city_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    index: true
   }
 }, {
   timestamps: true,

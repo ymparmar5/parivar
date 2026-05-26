@@ -168,7 +168,8 @@ const savePost = async (req, res) => {
     await post.save();
 
     return apiResponse(res, existing ? 200 : 201, 'Post saved successfully', {
-      id: post.id || String(post._id),
+
+      _id: post._id || String(post._id),
       title: post.title || '',
       description: post.description || '',
       image: publicUrl(req, post.image || ''),
